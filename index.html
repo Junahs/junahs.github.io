@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Junahs — small games, made for fun</title>
+<meta name="description" content="Junahs is a one-person indie label publishing small, free browser games and experiments.">
+<meta property="og:title" content="Junahs">
+<meta property="og:url" content="https://junahs.com/">
+<meta property="og:description" content="Small games, made for fun. Play free in your browser.">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/app-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fff6e6; --panel: #f6ead3; --line: #e6d6b8; --text: #17171f; --muted: #6e6352;
+    --red: #ff3b3b; --yellow: #ffc21a; --blue: #2f6bff; --ink: #17171f; --cream: #fff6e6;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #17171f; --panel: #22222d; --line: #33333f; --text: #fff6e6; --muted: #b9b4c7; }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 "Fredoka", "Nunito", system-ui, sans-serif;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  header.top { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .brand img { width: 40px; height: 40px; }
+  .brand span { font: 700 20px/1 "Fredoka", "Nunito", system-ui, sans-serif; letter-spacing: -0.02em; }
+  nav a { margin-left: 20px; color: var(--muted); text-decoration: none; font-size: 14px; }
+  nav a:hover { color: var(--text); }
+
+  .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--line); }
+  .hero h1 {
+    font: 700 clamp(44px, 9vw, 104px)/0.92 "Fredoka", "Nunito", system-ui, sans-serif;
+    letter-spacing: -0.04em; margin: 0 0 24px;
+  }
+  .hero h1 em { font-style: normal; color: var(--red); }
+  .hero p { max-width: 560px; color: var(--muted); margin: 0; font-size: 15px; }
+
+  section { padding: 56px 0; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  h2 { font: 700 32px/1.1 "Fredoka", "Nunito", system-ui, sans-serif; letter-spacing: -0.02em; margin: 0; }
+  .count { color: var(--muted); font-size: 13px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; display: flex; flex-direction: column; text-decoration: none;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--blue); }
+  .thumb { aspect-ratio: 16/9; background: #000 center/cover no-repeat; position: relative; display: grid; place-items: center;
+           font: 700 28px "Fredoka", "Nunito", system-ui, sans-serif; }
+  .badge { position: absolute; top: 10px; left: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em;
+           font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+  .badge.wip { background: var(--yellow); color: var(--ink); }
+  .badge.released { background: var(--ink); color: var(--cream); }
+  .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .body h3 { margin: 0; font: 700 22px/1.15 "Fredoka", "Nunito", system-ui, sans-serif; }
+  .body p { margin: 0; color: var(--muted); font-size: 14px; flex: 1; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tags span { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; }
+  .play { margin-top: 6px; font-weight: 600; color: var(--text); font-size: 14px; }
+
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; border-top: 1px solid var(--line); }
+  .about p { color: var(--muted); margin: 0 0 12px; }
+  .links a { display: inline-block; margin: 0 14px 10px 0; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 13px; }
+  .empty { color: var(--muted); }
+
+  @media (max-width: 700px) {
+    .about { grid-template-columns: 1fr; gap: 16px; }
+    nav a { margin-left: 14px; }
+    .hero { padding: 48px 0 40px; }
+    .wrap { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="./"><picture><source srcset="assets/logo-dark.svg" media="(prefers-color-scheme: dark)"><img src="assets/logo.svg" alt=""></picture><span>junahs</span></a>
+      <nav><a href="#games">Games</a><a href="#about">About</a></nav>
+    </header>
+
+    <div class="hero">
+      <h1>Small games,<br><em>made for fun.</em></h1>
+      <p>Junahs is a one-person label for quick, weird and (hopefully) fun browser games and experiments. Everything here plays in your browser — no installs.</p>
+    </div>
+
+    <section id="games">
+      <div class="section-head">
+        <h2>Games</h2>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="grid" id="grid"><p class="empty">Loading…</p></div>
+    </section>
+
+    <section id="about" class="about">
+      <div><h2>About</h2></div>
+      <div>
+        <p>Junahs is my name, Shanuj, spelled backwards. Every game made here is <em>a Junahs game</em>.</p>
+        <p>Every game here started as a small idea and a weekend of building — many with an AI pair-programmer. Some are polished, some are experiments. All are free.</p>
+        <p>Found a bug or have an idea? Get in touch.</p>
+        <div class="links">
+          <!-- EDIT: swap these for your real links -->
+          <a href="https://junahs.itch.io" rel="noopener">itch.io</a>
+          <a href="https://github.com/junahs-studios" rel="noopener">GitHub</a>
+          <a href="mailto:hello@junahs.com">Email</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>© <span id="yr"></span> Junahs · junahs.com · Made in London. Every game here is <b>a junahs game</b>.</footer>
+  </div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  fetch('games.json', { cache: 'no-cache' })
+    .then(r => r.json())
+    .then(games => {
+      const grid = document.getElementById('grid');
+      const list = games.filter(g => !g.hidden).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      document.getElementById('count').textContent = `${list.length} game${list.length === 1 ? '' : 's'}`;
+      if (!list.length) { grid.innerHTML = '<p class="empty">First game coming soon.</p>'; return; }
+      grid.innerHTML = list.map(g => {
+        const thumb = g.thumbnail
+          ? `style="background-image:url('${esc(g.thumbnail)}')"`
+          : `style="background:${esc(g.color || '#2e2a40')};color:${esc(g.textColor || '#fff6e6')}"`;
+        const external = /^https?:/.test(g.url);
+        return `<a class="card" href="${esc(g.url)}" ${external ? 'target="_blank" rel="noopener"' : ''}>
+          <div class="thumb" ${thumb}>
+            ${g.thumbnail ? '' : esc(g.title)}
+            <span class="badge ${g.status === 'released' ? 'released' : 'wip'}">${esc(g.status || 'wip')}</span>
+          </div>
+          <div class="body">
+            <h3>${esc(g.title)}</h3>
+            <p>${esc(g.tagline)}</p>
+            <div class="tags">${(g.tags || []).map(t => `<span>${esc(t)}</span>`).join('')}</div>
+            <div class="play">${external ? 'Play on ' + esc(new URL(g.url).hostname) : 'Play now'} →</div>
+          </div>
+        </a>`;
+      }).join('');
+    })
+    .catch(() => {
+      document.getElementById('grid').innerHTML =
+        '<p class="empty">Couldn\'t load games.json — if you opened this file directly, run it through a local server (see README).</p>';
+    });
+</script>
+</body>
+</html>

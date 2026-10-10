@@ -1,0 +1,19 @@
+[
+  {
+    "slug": "block-dodge",
+    "title": "Block Dodge",
+    "tagline": "Dodge the falling blocks for as long as you can. One life, no mercy.",
+    "url": "games/block-dodge/",
+    "status": "released",
+    "date": "2026-10-09",
+    "tags": [
+      "arcade",
+      "keyboard",
+      "touch"
+    ],
+    "color": "#2f6bff",
+    "thumbnail": "",
+    "textColor": "#ffffff",
+    "shape": "square"
+  }
+]

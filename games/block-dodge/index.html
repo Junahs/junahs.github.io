@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Block Dodge — a Junahs game</title>
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap">
+<style>
+  html, body { margin: 0; height: 100%; background: #17171f; color: #fff6e6; font: 500 15px Fredoka, system-ui, sans-serif; overflow: hidden; touch-action: none; }
+  canvas { display: block; margin: 0 auto; box-shadow: 0 0 0 1px #2e2a40; }
+  a.back { position: fixed; top: 12px; left: 12px; color: #b9b4c7; text-decoration: none; z-index: 2; }
+  .jn-badge { position: fixed; left: 16px; bottom: 16px; display: flex; align-items: center; gap: 6px; padding: 5px 12px 5px 7px; border: 1.5px solid #4a4a5c; border-radius: 999px; font: 600 11px Fredoka, system-ui, sans-serif; letter-spacing: .12em; color: #fff6e6; pointer-events: none; }
+  .jn-badge svg { width: 16px; height: 16px; }
+</style>
+</head>
+<body>
+<script src="../../brand/junahs-splash.js"></script>
+<a class="back" href="../../">← junahs</a>
+<div class="jn-badge" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M30.5 30.5H6.5A24 24 0 0 1 30.5 6.5Z" fill="#ff3b3b"/><circle cx="45.5" cy="18.5" r="11" fill="#ffc21a"/><rect x="35" y="35" width="21.5" height="21.5" rx="5" fill="#2f6bff"/><path d="M18.5 36.5L29 55H8Z" fill="#fff6e6" stroke="#fff6e6" stroke-width="3" stroke-linejoin="round"/></svg>A JUNAHS GAME</div>
+<canvas id="c"></canvas>
+<script>
+const c = document.getElementById('c'), x = c.getContext('2d');
+let W, H, player, blocks, score, best = 0, state = 'title', keys = {}, touchX = null, last = 0, spawn = 0;
+try { best = +localStorage.getItem('bd-best') || 0; } catch (e) {}
+
+function resize() { W = c.width = Math.min(innerWidth, 520); H = c.height = innerHeight; }
+addEventListener('resize', resize); resize();
+
+function reset() {
+  player = { x: W / 2, y: H - 70, w: 34, h: 34, v: 0 };
+  blocks = []; score = 0; spawn = 0; state = 'play';
+}
+addEventListener('keydown', e => { keys[e.key] = true; if ((e.key === ' ' || e.key === 'Enter') && state !== 'play') reset(); });
+addEventListener('keyup', e => keys[e.key] = false);
+c.addEventListener('pointerdown', e => { if (state !== 'play') reset(); touchX = e.offsetX; });
+c.addEventListener('pointermove', e => { if (touchX !== null) touchX = e.offsetX; });
+addEventListener('pointerup', () => touchX = null);
+
+function loop(t) {
+  const dt = Math.min((t - last) / 1000, 0.05); last = t;
+  x.fillStyle = '#17171f'; x.fillRect(0, 0, W, H);
+
+  if (state === 'play') {
+    const speed = 420;
+    let dir = (keys.ArrowRight || keys.d ? 1 : 0) - (keys.ArrowLeft || keys.a ? 1 : 0);
+    if (touchX !== null) dir = Math.sign(touchX - player.x) * Math.min(1, Math.abs(touchX - player.x) / 30);
+    player.x = Math.max(player.w / 2, Math.min(W - player.w / 2, player.x + dir * speed * dt));
+
+    score += dt;
+    spawn -= dt;
+    if (spawn <= 0) {
+      const s = 18 + Math.random() * 36;
+      blocks.push({ x: Math.random() * (W - s), y: -s, s, v: 160 + score * 14 + Math.random() * 120 });
+      spawn = Math.max(0.12, 0.6 - score * 0.012);
+    }
+    for (const b of blocks) {
+      b.y += b.v * dt;
+      if (b.x < player.x + player.w / 2 && b.x + b.s > player.x - player.w / 2 &&
+          b.y < player.y + player.h / 2 && b.y + b.s > player.y - player.h / 2) {
+        state = 'over';
+        if (score > best) { best = score; try { localStorage.setItem('bd-best', best.toFixed(1)); } catch (e) {} }
+      }
+    }
+    blocks = blocks.filter(b => b.y < H + 60);
+  }
+
+  x.fillStyle = '#ff3b3b';
+  for (const b of blocks || []) x.fillRect(b.x, b.y, b.s, b.s);
+  if (player) { x.fillStyle = '#2f6bff'; x.fillRect(player.x - player.w / 2, player.y - player.h / 2, player.w, player.h); }
+
+  x.fillStyle = '#fff6e6'; x.textAlign = 'right'; x.font = '600 16px Fredoka, system-ui, sans-serif';
+  x.fillText(`${(score || 0).toFixed(1)}s   best ${(+best).toFixed(1)}s`, W - 12, 26);
+
+  if (state !== 'play') {
+    x.textAlign = 'center';
+    x.fillStyle = '#fff6e6';
+    x.font = '700 44px Fredoka, system-ui, sans-serif';
+    x.fillText(state === 'title' ? 'BLOCK DODGE' : 'GAME OVER', W / 2, H / 2 - 20);
+    x.font = '15px Fredoka, system-ui, sans-serif'; x.fillStyle = '#b9b4c7';
+    x.fillText('← → / A D to move · drag on touch', W / 2, H / 2 + 16);
+    x.fillText('press space or tap to ' + (state === 'title' ? 'start' : 'retry'), W / 2, H / 2 + 40);
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
