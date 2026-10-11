@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garba Beat — a junahs game</title>
+<meta name="description" content="Garba Beat is a free Navratri rhythm game. Dance garba and dandiya to 17 songs across 12 venues, solo or live with up to 6 friends. No ads, no install.">
+<meta property="og:title" content="Garba Beat — the Navratri rhythm game">
+<meta property="og:description" content="Dance garba and dandiya on your phone. 17 songs, 12 venues, play live with friends. Free, no ads, no install.">
+<meta property="og:image" content="https://junahs.com/assets/games/garba-beat.jpg">
+<meta property="og:url" content="https://junahs.com/games/garba-beat/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#160d2b">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/app-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Festival night: deep indigo ground, marigold gold accents, a toran of junahs shapes. One deliberate dark look. */
+  :root {
+    --night: #160d2b;
+    --night-2: #1f1340;
+    --panel: #281a4c;
+    --line: rgba(255, 246, 230, 0.12);
+    --gold: #ffc21a;
+    --marigold: #ff8a1f;
+    --kumkum: #ff3b3b;
+    --blue: #2f6bff;
+    --text: #fff6e6;
+    --muted: #c9bfdd;
+    --ink: #17171f;
+    --radius: 18px;
+    --font: "Fredoka", "Nunito", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body { margin: 0; background: var(--night); color: var(--text); font: 400 17px/1.55 var(--font); }
+  a { color: inherit; }
+  img { max-width: 100%; }
+  h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.05; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; }
+
+  /* toran: a string of junahs shapes, like festival bunting */
+  .toran { height: 26px; background-repeat: repeat-x; background-size: 104px 26px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='26' viewBox='0 0 104 26'%3E%3Cpath d='M0 2 Q52 8 104 2' stroke='%23fff6e6' stroke-opacity='.35' fill='none'/%3E%3Cpath d='M6 4h16L14 20z' fill='%23ff3b3b'/%3E%3Cpath d='M32 5h16L40 21z' fill='%23ffc21a'/%3E%3Cpath d='M58 5h16L66 21z' fill='%232f6bff'/%3E%3Cpath d='M84 4h16L92 20z' fill='%23fff6e6'/%3E%3C/svg%3E"); }
+
+  /* header */
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 20px; }
+  .brand img { width: 34px; height: 34px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--gold); color: var(--ink); font-weight: 700; text-decoration: none; padding: 13px 26px; border-radius: 999px; border: 0; font: inherit; font-weight: 700; cursor: pointer; }
+  .btn:hover { filter: brightness(1.07); }
+  .btn.small { padding: 9px 18px; font-size: 15px; }
+  .btn.ghost { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1.5px var(--line); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 48px; align-items: center; padding-block: 40px 72px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  .eyebrow img { width: 18px; height: 18px; }
+  .hero h1 { font-size: clamp(56px, 10vw, 112px); font-weight: 700; letter-spacing: -0.02em; color: var(--gold); margin: 16px 0 14px; text-shadow: 0 6px 40px rgba(255, 138, 31, .35); }
+  .lede { font-size: clamp(19px, 2.3vw, 23px); line-height: 1.4; margin: 0 0 24px; max-width: 30ch; }
+  .facts { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 30px; padding: 0; list-style: none; }
+  .facts li { background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 15px; font-weight: 500; }
+  .facts b { color: var(--gold); font-weight: 700; }
+  .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+  .note { color: var(--muted); font-size: 15px; margin: 16px 0 0; }
+
+  .phone { position: relative; justify-self: center; width: min(320px, 78vw); aspect-ratio: 9 / 16; border-radius: 40px; padding: 10px; background: #0b0617; box-shadow: 0 0 0 1px var(--line), 0 30px 80px rgba(0, 0, 0, .55), 0 0 120px rgba(255, 138, 31, .18); }
+  .phone video { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 30px; background: var(--night-2); }
+  .sound { position: absolute; right: 22px; bottom: 22px; font: 600 13px var(--font); color: var(--text); background: rgba(11, 6, 23, .75); border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px; cursor: pointer; }
+
+  /* sections */
+  section { padding-block: 72px; border-top: 1px solid var(--line); }
+  .kicker { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--marigold); margin: 0 0 10px; }
+  h2 { font-size: clamp(34px, 5vw, 52px); font-weight: 700; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .intro { color: var(--muted); max-width: 60ch; margin: 0 0 36px; font-size: 18px; }
+  .intro strong { color: var(--text); font-weight: 600; }
+
+  .shot { margin: 0; }
+  .shot img { display: block; width: 100%; height: auto; aspect-ratio: 540 / 820; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); background: var(--night-2); }
+  .shot figcaption { color: var(--muted); font-size: 14px; margin-top: 10px; }
+
+  .moves { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+  .move h3 { font-size: 21px; font-weight: 600; margin: 16px 0 6px; }
+  .move p { color: var(--muted); font-size: 16px; margin: 0; }
+
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 48px; align-items: center; }
+  .split.flip .split-text { order: 2; }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .points { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .points li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; }
+  .points svg { width: 18px; height: 18px; margin-top: 4px; }
+
+  .venues { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(190px, 220px); gap: 16px; overflow-x: auto; padding-bottom: 14px; scroll-snap-type: x mandatory; }
+  .venues .shot { scroll-snap-align: start; }
+  .venues figcaption { color: var(--text); font-weight: 500; font-size: 15px; }
+
+  .nights { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 8px; margin: 0 0 28px; padding: 0; list-style: none; max-width: 560px; }
+  .nights li { aspect-ratio: 1; border-radius: 12px; border: 1px solid var(--line); display: grid; place-items: center; font-weight: 600; font-size: 15px; background: var(--panel); }
+  .nights li.c1 { background: #ff8a1f; color: var(--ink); }
+  .nights li.c2 { background: #fff6e6; color: var(--ink); }
+  .nights li.c3 { background: #e0262f; color: var(--text); }
+
+  .extras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .extra h3 { font-size: 23px; font-weight: 600; margin: 18px 0 8px; }
+  .extra p { color: var(--muted); margin: 0; font-size: 16px; }
+  .also { margin: 40px 0 0; color: var(--muted); font-size: 16px; }
+
+  .final { text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(255, 138, 31, .22), transparent 60%), var(--night-2); }
+  .final h2 { color: var(--gold); }
+  .final .cta { justify-content: center; margin-top: 8px; }
+  .scan { display: inline-flex; align-items: center; gap: 18px; margin-top: 40px; padding: 16px 22px 16px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); text-align: left; }
+  .scan img { width: 112px; height: 112px; border-radius: 10px; display: block; }
+  .scan p { margin: 0; color: var(--muted); font-size: 15px; max-width: 22ch; }
+  .scan strong { display: block; color: var(--text); font-size: 17px; margin-bottom: 4px; }
+
+  footer { padding-block: 36px 48px; color: var(--muted); font-size: 15px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; }
+  footer .sig { display: flex; align-items: center; gap: 10px; color: var(--text); font-size: 17px; }
+  footer .sig img { width: 26px; height: 26px; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 18px; }
+  footer nav a { color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .hero, .split { grid-template-columns: 1fr; gap: 36px; }
+    .split.flip .split-text { order: 0; }
+    .moves { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .extras { grid-template-columns: 1fr; gap: 40px; }
+    .extras .shot { max-width: 320px; }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding-inline: 16px; }
+    section { padding-block: 56px; }
+    .moves { gap: 18px 14px; }
+    .move h3 { font-size: 18px; }
+    .move p { font-size: 15px; }
+    .trio { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .trio .shot:last-child { display: none; }
+    .scan { flex-direction: column; text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+  <div class="toran" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="../../"><img src="../../assets/logo-dark.svg" alt="">junahs</a>
+      <a class="btn small" href="https://garbabeat.junahs.com/" target="_blank" rel="noopener">Play now</a>
+    </header>
+
+    <div class="hero">
+      <div>
+        <span class="eyebrow"><img src="../../assets/logo-dark.svg" alt="">a junahs game · Navratri 2026</span>
+        <h1>Garba Beat</h1>
+        <p class="lede">The Navratri rhythm game. Dance garba and dandiya right on your phone, solo or with friends.</p>
+        <ul class="facts">
+          <li><b>17</b> songs</li>
+          <li><b>12</b> venues</li>
+          <li>Easy, Normal, Hard</li>
+          <li>Up to <b>6</b> friends live</li>
+        </ul>
+        <div class="cta">
+          <a class="btn" href="https://garbabeat.junahs.com/" target="_blank" rel="noopener">Play Garba Beat</a>
+          <a class="btn ghost" href="#how">How to play</a>
+        </div>
+        <p class="note">Free · No ads · No install · Plays in your browser</p>
+      </div>
+      <div class="phone">
+        <video id="trailer" src="launch.mp4" poster="poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Garba Beat launch trailer"></video>
+        <button class="sound" id="sound" type="button" aria-pressed="false">Sound on</button>
+      </div>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <p class="kicker">How to play</p>
+      <h2>Four moves, one circle</h2>
+      <p class="intro">Notes travel around the circle to the beat of the song. Hit them as they reach the ring, keep your combo alive and the whole crowd joins in.</p>
+      <div class="moves">
+        <div class="move">
+          <figure class="shot"><img src="img/courtyard.jpg" alt="Tapping a note on the ring in the society courtyard, with a 50 combo" loading="lazy" width="540" height="820"></figure>
+          <h3>Tap on the beat</h3>
+          <p>Hit each note as it lands on the ring. Time it right for a Perfect.</p>
+        </div>
+        <div class="move">
+          <figure class="shot"><img src="img/ghoomar.jpg" alt="A long hold note curving around the circle" loading="lazy" width="540" height="820"></figure>
+          <h3>Hold for a ghoomar spin</h3>
+          <p>Long notes sweep around the circle. Hold all the way through to spin.</p>
+        </div>
+        <div class="move">
+          <figure class="shot"><img src="img/riverfront.jpg" alt="A 75 combo at the riverfront venue" loading="lazy" width="540" height="820"></figure>
+          <h3>Swipe up to jump</h3>
+          <p>Flick up on jump notes. Bigger streaks unlock bigger moves.</p>
+        </div>
+        <div class="move">
+          <figure class="shot"><img src="img/utsav.jpg" alt="A dhol solo in the stadium with spotlights" loading="lazy" width="540" height="820"></figure>
+          <h3>Fill the Utsav meter</h3>
+          <p>Build the meter to set off a dhol solo, where every hit scores double.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dandiya">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="kicker">Dandiya</p>
+        <h2>Strike sticks with your jodi</h2>
+        <p class="intro">Dandiya songs pair you up with a jodi. Low strikes, backhands and spins come at you around the circle.</p>
+        <ul class="points">
+          <li><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30.5 30.5H6.5A24 24 0 0 1 30.5 6.5Z" fill="#ff3b3b"/><circle cx="45.5" cy="18.5" r="11" fill="#ffc21a"/><rect x="35" y="35" width="21.5" height="21.5" rx="5" fill="#2f6bff"/><path d="M18.5 36.5L29 55H8Z" fill="#fff6e6"/></svg><span>Land the same strike as your jodi for a <strong>Jodi bonus</strong>.</span></li>
+          <li><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30.5 30.5H6.5A24 24 0 0 1 30.5 6.5Z" fill="#ff3b3b"/><circle cx="45.5" cy="18.5" r="11" fill="#ffc21a"/><rect x="35" y="35" width="21.5" height="21.5" rx="5" fill="#2f6bff"/><path d="M18.5 36.5L29 55H8Z" fill="#fff6e6"/></svg><span>Hit the big beats together for <strong>Sangat</strong>.</span></li>
+          <li><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30.5 30.5H6.5A24 24 0 0 1 30.5 6.5Z" fill="#ff3b3b"/><circle cx="45.5" cy="18.5" r="11" fill="#ffc21a"/><rect x="35" y="35" width="21.5" height="21.5" rx="5" fill="#2f6bff"/><path d="M18.5 36.5L29 55H8Z" fill="#fff6e6"/></svg><span>Watch the circle: sometimes it turns anticlockwise.</span></li>
+        </ul>
+      </div>
+      <div class="pair">
+        <figure class="shot"><img src="img/haveli.jpg" alt="Striking sticks with a dandiya partner in the haveli chowk" loading="lazy" width="540" height="820"></figure>
+        <figure class="shot"><img src="img/rann.jpg" alt="A 100 combo under the full moon at the Rann Utsav" loading="lazy" width="540" height="820"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="friends">
+    <div class="wrap split flip">
+      <div class="split-text">
+        <p class="kicker">Multiplayer</p>
+        <h2>Dance live with friends</h2>
+        <p class="intro">Open a room and invite up to five friends. Everyone dances the same song at the same time, with emotes, and <strong>Sangat bonuses</strong> when the whole group hits the beat.</p>
+        <p class="intro">Pick who you'd like as your jodi in the lobby, or get paired up automatically.</p>
+      </div>
+      <div class="trio">
+        <figure class="shot"><img src="img/party-plot.jpg" alt="Friends dancing together at the party plot with a 100 combo" loading="lazy" width="540" height="820"></figure>
+        <figure class="shot"><img src="img/mahotsav.jpg" alt="A group dance at the Navratri Mahotsav stage" loading="lazy" width="540" height="820"></figure>
+        <figure class="shot"><img src="img/jodi.jpg" alt="The room lobby, where each dancer picks a jodi" loading="lazy" width="540" height="820"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="venues">
+    <div class="wrap">
+      <p class="kicker">Venues</p>
+      <h2>12 venues, from the society courtyard to the Rann</h2>
+      <p class="intro">Every venue has its own lights, crowd and atmosphere. Here are some of them.</p>
+      <div class="venues" tabindex="0" aria-label="Venue gallery, scrolls sideways">
+        <figure class="shot"><img src="img/courtyard.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Society courtyard</figcaption></figure>
+        <figure class="shot"><img src="img/rooftop.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Rooftop garba</figcaption></figure>
+        <figure class="shot"><img src="img/beach.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Beach garba</figcaption></figure>
+        <figure class="shot"><img src="img/stadium.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Stadium raas</figcaption></figure>
+        <figure class="shot"><img src="img/pandal.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Navratri pandal</figcaption></figure>
+        <figure class="shot"><img src="img/riverfront.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Riverfront lights</figcaption></figure>
+        <figure class="shot"><img src="img/haveli.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Haveli chowk</figcaption></figure>
+        <figure class="shot"><img src="img/party-plot.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Party plot</figcaption></figure>
+        <figure class="shot"><img src="img/mahotsav.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Navratri Mahotsav</figcaption></figure>
+        <figure class="shot"><img src="img/rann.jpg" alt="" loading="lazy" width="540" height="820"><figcaption>Rann Utsav</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="nights">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="kicker">11 – 19 October 2026</p>
+        <h2>9 nights, 9 colours</h2>
+        <p class="intro">Each night of Navratri has its own colour of the day and a featured song. Clear it with at least one star to earn that colour for your outfits, plus 50 credits. <strong>Play on the night itself and the credits are doubled.</strong></p>
+        <ol class="nights" aria-label="The nine nights of Navratri">
+          <li class="c1" aria-label="Night 1, orange">1</li>
+          <li class="c2" aria-label="Night 2, white">2</li>
+          <li class="c3" aria-label="Night 3, red">3</li>
+          <li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li>
+        </ol>
+        <p class="intro">There's also a <strong>daily challenge</strong> with a twist, like dancing without the guide claps, for bonus credits once a day.</p>
+      </div>
+      <div class="pair">
+        <figure class="shot"><img src="img/nights.jpg" alt="The Navratri nights screen showing night 1 orange and night 2 white" loading="lazy" width="540" height="820"></figure>
+        <figure class="shot"><img src="img/menu.jpg" alt="The Garba Beat main menu with the daily challenge and play buttons" loading="lazy" width="540" height="820"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="wardrobe">
+    <div class="wrap split flip">
+      <div class="split-text">
+        <p class="kicker">Wardrobe</p>
+        <h2>Dress your dancer</h2>
+        <p class="intro">Choose chaniya cholis, kediyus, kurtas and dupattas, then style the hair, jewellery and sticks. Pick colours like kumkum red, and unlock more with the credits you earn on the dance floor.</p>
+      </div>
+      <div class="pair">
+        <figure class="shot"><img src="img/wardrobe.jpg" alt="The wardrobe with choli, kediyu and kurta outfits" loading="lazy" width="540" height="820"></figure>
+        <figure class="shot"><img src="img/wardrobe-colours.jpg" alt="Choosing colours for an outfit, starting with kumkum red" loading="lazy" width="540" height="820"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="wrap">
+      <p class="kicker">And there's more</p>
+      <h2>Learn, climb, collect</h2>
+      <div class="extras">
+        <div class="extra">
+          <figure class="shot"><img src="img/lesson.jpg" alt="A guided lesson prompting the player to tap now" loading="lazy" width="540" height="820"></figure>
+          <h3>Learn the steps</h3>
+          <p>Guided lessons teach garba and the raas step by step, so anyone can join the circle.</p>
+        </div>
+        <div class="extra">
+          <figure class="shot"><img src="img/leaderboard.jpg" alt="A leaderboard for one song on Hard, filtered to friends this week" loading="lazy" width="540" height="820"></figure>
+          <h3>Climb the leaderboards</h3>
+          <p>Every song and difficulty has its own board: solo or group, friends or the whole world, this week or all time.</p>
+        </div>
+        <div class="extra">
+          <figure class="shot"><img src="img/results.jpg" alt="A results screen with three stars, 100% accuracy and new badges" loading="lazy" width="540" height="820"></figure>
+          <h3>Earn stars and badges</h3>
+          <p>Score up to three stars a song, and collect credits and badges for your firsts and new bests.</p>
+        </div>
+      </div>
+      <p class="also">Also inside: profiles and badges, a guide, and an experimental chart editor.</p>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <h2>Ready to dance?</h2>
+      <p class="intro" style="margin-inline: auto;">Garba Beat is free, has no ads and plays straight in your browser. Nothing to download.</p>
+      <div class="cta">
+        <a class="btn" href="https://garbabeat.junahs.com/" target="_blank" rel="noopener">Play Garba Beat</a>
+      </div>
+      <div class="scan">
+        <img src="img/qr.png" alt="QR code linking to garbabeat.junahs.com" width="112" height="112">
+        <p><strong>On a computer?</strong>Scan to play on your phone at garbabeat.junahs.com</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <footer>
+      <span class="sig"><img src="../../assets/logo-dark.svg" alt="">a <b>junahs</b> game</span>
+      <nav aria-label="Junahs">
+        <a href="../../">More games</a>
+        <a href="https://www.instagram.com/a.junahs.game/" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com/company/junahs" rel="noopener">LinkedIn</a>
+        <a href="mailto:hello@junahs.com">hello@junahs.com</a>
+      </nav>
+    </footer>
+  </div>
+
+<script>
+  (function () {
+    var v = document.getElementById('trailer'), b = document.getElementById('sound');
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      v.removeAttribute('autoplay'); v.pause(); v.controls = true;
+    }
+    b.addEventListener('click', function () {
+      v.muted = !v.muted;
+      if (!v.muted) { v.play().catch(function () {}); }
+      b.textContent = v.muted ? 'Sound on' : 'Sound off';
+      b.setAttribute('aria-pressed', String(!v.muted));
+    });
+  })();
+</script>
+</body>
+</html>

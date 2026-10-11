@@ -89,7 +89,8 @@
   .btn { display: inline-block; background: var(--yellow); color: var(--ink); font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: 999px; }
   .btn:hover { filter: brightness(1.06); }
   .btn:focus-visible, .feat-media:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
-  .feat-note { color: var(--muted); font-size: 14px; }
+  .feat-note { color: var(--muted); font-size: 14px; margin: 14px 0 0; }
+  .feat-more { font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
   @media (max-width: 800px) { .featured { grid-template-columns: 1fr; gap: 24px; padding: 40px 0; } }
 
   @media (max-width: 700px) {
@@ -113,7 +114,7 @@
     </div>
 
     <section class="featured" aria-labelledby="feat-title">
-      <a class="feat-media" href="https://garbabeat.junahs.com/" target="_blank" rel="noopener"><img src="assets/games/garba-beat.jpg" alt="Garba Beat gameplay in three venues: a society courtyard, a rooftop garba and a party plot" width="1280" height="720"></a>
+      <a class="feat-media" href="games/garba-beat/"><img src="assets/games/garba-beat.jpg" alt="Garba Beat gameplay in three venues: a society courtyard, a rooftop garba and a party plot" width="1280" height="720"></a>
       <div class="feat-body">
         <span class="feat-tag">New · Navratri 2026</span>
         <h2 id="feat-title">Garba Beat</h2>
@@ -126,8 +127,9 @@
         </ul>
         <div class="feat-actions">
           <a class="btn" href="https://garbabeat.junahs.com/" target="_blank" rel="noopener">Play Garba Beat</a>
-          <span class="feat-note">Free · No ads · No install</span>
+          <a class="feat-more" href="games/garba-beat/">See all features →</a>
         </div>
+        <p class="feat-note">Free · No ads · No install</p>
       </div>
     </section>
 
