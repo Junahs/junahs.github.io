@@ -79,6 +79,19 @@
   footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 13px; }
   .empty { color: var(--muted); }
 
+  .featured { display: grid; grid-template-columns: 1.3fr 1fr; gap: 36px; align-items: center; padding: 48px 0 56px; border-bottom: 1px solid var(--line); }
+  .feat-media img { display: block; width: 100%; height: auto; border-radius: var(--radius); }
+  .feat-tag { display: inline-block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; background: var(--yellow); color: var(--ink); padding: 4px 11px; border-radius: 999px; }
+  .featured h2 { font-size: clamp(36px, 5vw, 52px); margin: 14px 0 8px; }
+  .feat-lede { margin: 0 0 16px; color: var(--muted); font-size: 17px; }
+  .feat-list { margin: 0 0 24px; padding-left: 20px; display: grid; gap: 6px; }
+  .feat-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .btn { display: inline-block; background: var(--yellow); color: var(--ink); font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: 999px; }
+  .btn:hover { filter: brightness(1.06); }
+  .btn:focus-visible, .feat-media:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+  .feat-note { color: var(--muted); font-size: 14px; }
+  @media (max-width: 800px) { .featured { grid-template-columns: 1fr; gap: 24px; padding: 40px 0; } }
+
   @media (max-width: 700px) {
     .about { grid-template-columns: 1fr; gap: 16px; }
     nav a { margin-left: 14px; }
@@ -98,6 +111,25 @@
       <h1>Small games,<br><em>made for fun.</em></h1>
       <p>Junahs is a one-person label for quick, weird and (hopefully) fun browser games and experiments. Everything here plays in your browser — no installs.</p>
     </div>
+
+    <section class="featured" aria-labelledby="feat-title">
+      <a class="feat-media" href="https://garba-beat-app.vercel.app/" target="_blank" rel="noopener"><img src="assets/games/garba-beat.jpg" alt="Garba Beat gameplay in three venues: a society courtyard, a rooftop garba and a party plot" width="1280" height="720"></a>
+      <div class="feat-body">
+        <span class="feat-tag">New · Navratri 2026</span>
+        <h2 id="feat-title">Garba Beat</h2>
+        <p class="feat-lede">The Navratri rhythm game. Dance garba and dandiya to the beat, right on your phone.</p>
+        <ul class="feat-list">
+          <li>17 songs, from Easy to Hard</li>
+          <li>12 venues, from a society courtyard to the Rann</li>
+          <li>Strike sticks with your jodi, or dance live with up to 6 friends</li>
+          <li>9 nights, 9 colours: play each night of Navratri to collect them all</li>
+        </ul>
+        <div class="feat-actions">
+          <a class="btn" href="https://garba-beat-app.vercel.app/" target="_blank" rel="noopener">Play Garba Beat</a>
+          <span class="feat-note">Free · No ads · No install</span>
+        </div>
+      </div>
+    </section>
 
     <section id="games">
       <div class="section-head">
@@ -151,7 +183,7 @@
             <h3>${esc(g.title)}</h3>
             <p>${esc(g.tagline)}</p>
             <div class="tags">${(g.tags || []).map(t => `<span>${esc(t)}</span>`).join('')}</div>
-            <div class="play">${external ? 'Play on ' + esc(new URL(g.url).hostname) : 'Play now'} →</div>
+            <div class="play">${esc(g.playLabel || (external ? 'Play on ' + new URL(g.url).hostname : 'Play now'))} →</div>
           </div>
         </a>`;
       }).join('');

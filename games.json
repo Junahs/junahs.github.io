@@ -1,5 +1,23 @@
 [
   {
+    "slug": "garba-beat",
+    "title": "Garba Beat",
+    "tagline": "The Navratri rhythm game. Dance garba and dandiya to 17 songs across 12 venues, solo or with friends.",
+    "url": "https://garba-beat-app.vercel.app/",
+    "playLabel": "Play Garba Beat",
+    "status": "released",
+    "date": "2026-10-10",
+    "tags": [
+      "rhythm",
+      "navratri",
+      "multiplayer",
+      "touch"
+    ],
+    "thumbnail": "assets/games/garba-beat.jpg",
+    "color": "#1a1033",
+    "shape": "circle"
+  },
+  {
     "slug": "block-dodge",
     "title": "Block Dodge",
     "tagline": "Dodge the falling blocks for as long as you can. One life, no mercy.",
