@@ -69,8 +69,14 @@
   .note { color: var(--muted); font-size: 15px; margin: 16px 0 0; }
 
   .phone { position: relative; justify-self: center; width: min(320px, 78vw); aspect-ratio: 9 / 16; border-radius: 40px; padding: 10px; background: #0b0617; box-shadow: 0 0 0 1px var(--line), 0 30px 80px rgba(0, 0, 0, .55), 0 0 120px rgba(255, 138, 31, .18); }
+  .phone { margin-bottom: 58px; }
   .phone video { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 30px; background: var(--night-2); }
-  .sound { position: absolute; right: 22px; bottom: 22px; font: 600 13px var(--font); color: var(--text); background: rgba(11, 6, 23, .75); border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px; cursor: pointer; }
+  .sound { position: absolute; right: 4px; bottom: -58px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--text); background: rgba(11, 6, 23, .7); border: 1px solid var(--line); border-radius: 50%; cursor: pointer; padding: 0; }
+  .sound:hover { background: rgba(11, 6, 23, .9); }
+  .sound svg { width: 22px; height: 22px; }
+  .sound .on { display: none; }
+  .sound[aria-pressed="true"] .on { display: block; }
+  .sound[aria-pressed="true"] .off { display: none; }
 
   /* sections */
   section { padding-block: 72px; border-top: 1px solid var(--line); }
@@ -171,7 +177,10 @@
       </div>
       <div class="phone">
         <video id="trailer" src="launch.mp4" poster="poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Garba Beat launch trailer"></video>
-        <button class="sound" id="sound" type="button" aria-pressed="false">Sound on</button>
+        <button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Turn sound on" title="Turn sound on">
+          <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor"/><path d="m23 9-6 6"/><path d="m17 9 6 6"/></svg>
+          <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -356,8 +365,10 @@
     b.addEventListener('click', function () {
       v.muted = !v.muted;
       if (!v.muted) { v.play().catch(function () {}); }
-      b.textContent = v.muted ? 'Sound on' : 'Sound off';
+      var label = v.muted ? 'Turn sound on' : 'Turn sound off';
       b.setAttribute('aria-pressed', String(!v.muted));
+      b.setAttribute('aria-label', label);
+      b.title = label;
     });
   })();
 </script>
